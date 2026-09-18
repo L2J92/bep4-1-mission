@@ -6,7 +6,6 @@ import com.back.global.jpa.entity.BaseIdAndTime;
 import com.back.shared.post.dto.PostCommentDto;
 import com.back.shared.post.event.PostCommentCreatedEvent;
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +19,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "POST_MEMBER")
+@Table(name = "POST_POST")
 public class Post extends BaseIdAndTime {
     @ManyToOne(fetch = LAZY)
     private Member author;
@@ -41,7 +40,6 @@ public class Post extends BaseIdAndTime {
 
         comments.add(postComment);
 
-        //TODO: 이벤트 수정
         publishEvent(new PostCommentCreatedEvent(new PostCommentDto(postComment)));
 
         return postComment;
