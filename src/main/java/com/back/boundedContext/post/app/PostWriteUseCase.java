@@ -18,12 +18,8 @@ public class PostWriteUseCase {
     private final EventPublisher eventPublisher;
     private final MemberApiClient memberApiClient;
 
-    public long count() {
-        return postRepository.count();
-    }
-
     public RsData<Post> write(Member author, String title, String content) {
-        Post post = new Post(author, title, content);
+        Post post = postRepository.save(new Post(author, title, content));
 
         eventPublisher.publish(
                 new PostCreatedEvent(
