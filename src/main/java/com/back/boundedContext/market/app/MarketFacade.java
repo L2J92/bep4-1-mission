@@ -4,6 +4,7 @@ import com.back.boundedContext.market.domain.Cart;
 import com.back.boundedContext.market.domain.MarketMember;
 import com.back.boundedContext.market.domain.Order;
 import com.back.boundedContext.market.domain.Product;
+import com.back.global.exception.DomainException;
 import com.back.global.rsData.RsData;
 import com.back.shared.cash.event.CashOrderPaymentFailedEvent;
 import com.back.shared.cash.event.CashOrderPaymentSucceededEvent;
@@ -93,7 +94,13 @@ public class MarketFacade {
     }
 
     @Transactional
-    public void requestPayment(Order order, long pgPaymentAmount) {
+    public void requestPayment(Order orderObj, long pgPaymentAmount) {
+        Order order = marketSupport.findOrderById(orderObj.getId())
+                .orElseThrow(() -> new DomainException(
+                        "404-1",
+                        "주문을 찾을 수 없습니다."
+                ));
+
         order.requestPayment(pgPaymentAmount);
     }
 
